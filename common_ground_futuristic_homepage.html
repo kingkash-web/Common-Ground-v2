@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10131c">
+  <title>COMMON GROUND // Future of Debate</title>
+  <style>
+    :root {
+      --bg: #10131c;
+      --panel: #181d29;
+      --panel2: #202737;
+      --line: #30394b;
+      --text: #f4f6fb;
+      --muted: #a7b0c2;
+      --green: #57ffd0;
+      --green-dark: #103b38;
+      --purple: #a99bff;
+      --orange: #ffc47a;
+      --red: #ff9b9b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 12% 4%, rgba(0,255,209,.13), transparent 34%),
+        radial-gradient(ellipse at 88% 8%, rgba(119,92,255,.17), transparent 31%),
+        linear-gradient(180deg, #090d16 0%, #10131c 55%, #0a1018 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    button, textarea, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    .shell { width: min(1100px, 100% - 32px); margin: auto; }
+    body::before { content: ''; position: fixed; inset: 0; pointer-events: none; opacity: .12; z-index: -1; background-image: linear-gradient(rgba(135,164,191,.10) 1px, transparent 1px), linear-gradient(90deg, rgba(135,164,191,.10) 1px, transparent 1px); background-size: 42px 42px; mask-image: linear-gradient(to bottom, black, transparent 75%); }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 18px; padding: 20px 0; border-bottom: 1px solid rgba(87,255,208,.18);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 850; letter-spacing: -.5px; }
+    .brand-mark {
+      display: grid; place-items: center; width: 40px; height: 40px;
+      border-radius: 13px; color: #071510; background: var(--green); box-shadow: 0 0 24px rgba(87,255,208,.25);
+      font-size: 20px; font-weight: 950;
+    }
+    .brand small { display: block; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; }
+    nav { display: flex; gap: 22px; color: var(--muted); font-size: 14px; }
+    nav a:hover { color: var(--green); }
+    .guest-btn, .primary, .secondary, .vote-btn {
+      border: 0; border-radius: 12px; padding: 11px 15px; font-weight: 750;
+    }
+    .guest-btn, .primary { background: var(--green); color: #071510; box-shadow: 0 0 18px rgba(87,255,208,.12); }
+    .secondary, .vote-btn { background: var(--panel2); color: var(--text); border: 1px solid var(--line); }
+    .guest-btn:hover, .primary:hover { filter: brightness(1.07); }
+    .hero { padding: 50px 0 30px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 30px; align-items: center; }
+    .eyebrow { color: var(--green); font-size: 12px; letter-spacing: 2px; font-weight: 850; text-transform: uppercase; }
+    h1 { font-size: clamp(36px, 6vw, 62px); line-height: 1.02; letter-spacing: -2.4px; margin: 14px 0; text-shadow: 0 0 34px rgba(87,255,208,.09); }
+    h1 span { color: var(--green); text-shadow: 0 0 22px rgba(87,255,208,.28); }
+    .hero p { color: var(--muted); max-width: 560px; font-size: 16px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+    .hero-note { color: var(--muted); font-size: 12px; margin-top: 12px; }
+    .hero-card {
+      border: 1px solid var(--line); border-radius: 24px; padding: 22px;
+      background: linear-gradient(145deg, rgba(23,39,52,.96), rgba(15,22,35,.96));
+      box-shadow: 0 0 0 1px rgba(87,255,208,.04), 0 22px 65px rgba(0,0,0,.30), 0 0 45px rgba(87,255,208,.05);
+      position: relative; overflow: hidden;
+    }
+    .mini-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 6px 10px; font-size: 11px; font-weight: 800; background: var(--green-dark); color: var(--green); }
+    .live-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; }
+    .hero-card::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 35%, rgba(87,255,208,.045) 50%, transparent 65%); }
+    .hero-card h3 { font-size: 21px; line-height: 1.25; margin: 18px 0 8px; }
+    .muted { color: var(--muted); }
+    .stat-row { display: flex; gap: 18px; margin-top: 18px; }
+    .stat { color: var(--muted); font-size: 12px; }
+    .stat strong { display: block; color: var(--text); font-size: 19px; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 15px; margin: 28px 0 16px; }
+    .section-head h2 { margin: 0; font-size: 25px; letter-spacing: -.7px; }
+    .section-head p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(260px, .8fr); gap: 18px; align-items: start; }
+    .panel { background: linear-gradient(150deg, rgba(23,29,43,.97), rgba(15,20,31,.97)); border: 1px solid rgba(125,148,180,.24); border-radius: 20px; padding: 20px; box-shadow: 0 12px 40px rgba(0,0,0,.13); }
+    .topic-title { font-size: clamp(23px, 3vw, 32px); line-height: 1.15; letter-spacing: -.8px; margin: 14px 0 8px; }
+    .topic-desc { color: var(--muted); font-size: 14px; }
+    .sides { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
+    .side { padding: 15px; border-radius: 15px; border: 1px solid var(--line); background: linear-gradient(145deg, #1b2534, #151c29); }
+    .side.yes { border-color: rgba(87,255,208,.42); box-shadow: inset 0 0 22px rgba(87,255,208,.025); }
+    .side.no { border-color: rgba(169,155,255,.35); }
+    .side h4 { margin: 0 0 7px; font-size: 13px; letter-spacing: .5px; }
+    .side p { margin: 0; font-size: 13px; color: var(--muted); }
+    .side.yes h4 { color: var(--green); }
+    .side.no h4 { color: var(--purple); }
+    .side button { width: 100%; margin-top: 13px; padding: 9px; border-radius: 10px; }
+    .progress-head { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; margin-bottom: 8px; }
+    .progress-head span:last-child { color: var(--green); font-weight: 800; }
+    .progress { height: 8px; background: #2b3343; border-radius: 99px; overflow: hidden; }
+    .progress > div { height: 100%; width: 62%; background: linear-gradient(90deg, var(--green), #b5f4d5); border-radius: inherit; transition: width .25s ease; }
+    .agreement { margin-top: 16px; padding: 15px; border: 1px solid rgba(112,225,173,.25); border-radius: 15px; background: linear-gradient(135deg, rgba(16,59,56,.48), rgba(18,31,43,.65)); }
+    .agreement h4 { margin: 0 0 7px; color: var(--green); font-size: 13px; }
+    .agreement p { margin: 0; font-size: 14px; }
+    .agreement-actions { display: flex; gap: 8px; margin-top: 13px; flex-wrap: wrap; }
+    .agreement-actions button { flex: 1; min-width: 130px; }
+    .side-panel h3 { margin: 0 0 14px; font-size: 17px; }
+    .rule { display: flex; gap: 10px; margin: 14px 0; color: var(--muted); font-size: 13px; }
+    .rule b { display: grid; place-items: center; flex: 0 0 27px; height: 27px; background: var(--panel2); color: var(--green); border-radius: 9px; }
+    .topic-list { display: grid; gap: 10px; }
+    .topic-item { padding: 13px; border: 1px solid var(--line); border-radius: 13px; background: linear-gradient(145deg, #1b2534, #151c29); }
+    .topic-item strong { display: block; font-size: 13px; }
+    .topic-item span { color: var(--muted); font-size: 11px; }
+    .composer { margin-top: 18px; }
+    .composer label { display: block; font-size: 13px; font-weight: 750; margin-bottom: 8px; }
+    textarea, input {
+      width: 100%; border: 1px solid var(--line); border-radius: 12px; padding: 12px;
+      color: var(--text); background: #111722; outline: none;
+    }
+    textarea { min-height: 95px; resize: vertical; }
+    textarea:focus, input:focus { border-color: var(--green); }
+    .composer-bottom { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 9px; }
+    .composer-bottom small { color: var(--muted); font-size: 11px; }
+    .comments { display: grid; gap: 10px; margin-top: 15px; }
+    .comment { padding: 13px; border: 1px solid var(--line); border-radius: 13px; background: linear-gradient(145deg, #1b2534, #151c29); }
+    .comment-head { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; }
+    .comment-head strong { color: var(--green); }
+    .comment p { margin: 8px 0 0; font-size: 13px; color: #dce2ed; overflow-wrap: anywhere; }
+    .comment button { margin-top: 9px; border: 0; background: transparent; color: var(--muted); padding: 0; font-size: 12px; }
+    .notice { display: none; margin-top: 12px; padding: 11px 12px; border-radius: 10px; background: #302b1e; color: var(--orange); font-size: 12px; }
+    .notice.show { display: block; }
+    footer { padding: 32px 0 42px; margin-top: 30px; border-top: 1px solid rgba(87,255,208,.16); color: var(--muted); font-size: 12px; }
+    .footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; padding-top: 36px; }
+      .layout { grid-template-columns: 1fr; }
+      nav { display: none; }
+      .hero-card { max-width: 560px; }
+    }
+    @media (max-width: 430px) {
+      .shell { width: min(100% - 22px, 1100px); }
+      header { padding: 14px 0; }
+      .brand-mark { width: 36px; height: 36px; }
+      .guest-btn { padding: 9px 11px; font-size: 12px; }
+      .hero { gap: 20px; }
+      .panel { padding: 15px; }
+      .sides { grid-template-columns: 1fr; }
+      .section-head h2 { font-size: 22px; }
+      .stat-row { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell">
+    <a class="brand" href="#" aria-label="Common Ground home">
+      <span class="brand-mark">◈</span>
+      <span>COMMON GROUND<small>IDEAS IN · UNDERSTANDING OUT</small></span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#today">Today's debate</a>
+      <a href="#how">How it works</a>
+      <a href="#community">Community</a>
+    </nav>
+    <button class="guest-btn" id="guestButton">Enter as guest ↗</button>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">◈ A NEW KIND OF SOCIAL DEBATE</div>
+        <h1>Disagree better.<br><span>Understand more.</span></h1>
+        <p>One topic each day. Two sides. One shared goal: find common ground without pretending everyone thinks alike.</p>
+        <div class="hero-actions">
+          <a class="primary" href="#today">Join today's debate ↓</a>
+          <a class="secondary" href="#how">How it works</a>
+        </div>
+        <div class="hero-note">No public real names needed. Respectful disagreement is the point.</div>
+      </div>
+      <div class="hero-card">
+        <div class="mini-top">
+          <span class="pill"><span class="live-dot"></span> DAILY DEBATE</span>
+          <span class="muted" style="font-size:12px">Topic #001</span>
+        </div>
+        <h3>Should every student learn a digital skill before graduation?</h3>
+        <p class="muted" style="font-size:13px;margin-bottom:0">Make your case. Listen carefully. Help shape a conclusion both sides can accept.</p>
+        <div class="stat-row">
+          <div class="stat"><strong id="heroParticipants">128</strong>participants</div>
+          <div class="stat"><strong id="heroReplies">46</strong>arguments</div>
+          <div class="stat"><strong>62%</strong>agreement progress</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="today">
+      <div class="section-head">
+        <div><h2>Today's debate</h2><p>Make a case. Stay curious. Find the overlap.</p></div>
+        <span class="pill">🌍 Global topic</span>
+      </div>
+
+      <div class="layout">
+        <div>
+          <article class="panel">
+            <div class="mini-top">
+              <span class="eyebrow" style="letter-spacing:1px">Education · Technology</span>
+              <span class="muted" style="font-size:12px">6 min read</span>
+            </div>
+            <h3 class="topic-title">Should every student learn a digital skill before graduation?</h3>
+            <p class="topic-desc">Universities teach deep subject knowledge. The job market also values practical digital skills. How should students balance both?</p>
+
+            <div class="sides">
+              <div class="side yes">
+                <h4>🟢 YES, IT SHOULD BE EXPECTED</h4>
+                <p>Digital skills open doors to jobs, business, and independent learning.</p>
+                <button class="vote-btn" data-side="yes">Support this side <span id="yesCount">74</span></button>
+              </div>
+              <div class="side no">
+                <h4>🟣 NOT FOR EVERYONE</h4>
+                <p>Students need time for their main course, and not every skill fits every career.</p>
+                <button class="vote-btn" data-side="no">Support this side <span id="noCount">54</span></button>
+              </div>
+            </div>
+
+            <div class="progress-head"><span>Shared agreement progress</span><span id="progressLabel">62%</span></div>
+            <div class="progress" role="progressbar" aria-label="Agreement progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62"><div id="progressBar"></div></div>
+
+            <div class="agreement">
+              <h4>🤝 PROPOSED COMMON GROUND</h4>
+              <p id="agreementText">Students should focus on their main studies while having opportunities to learn practical digital skills that fit their goals.</p>
+              <div class="agreement-actions">
+                <button class="primary" id="agreeButton">I can support this</button>
+                <button class="secondary" id="reviseButton">Suggest a change</button>
+              </div>
+              <div class="notice" id="agreementNotice" role="status"></div>
+            </div>
+
+            <div class="composer" id="community">
+              <label for="argument">Add a thoughtful argument</label>
+              <textarea id="argument" maxlength="500" placeholder="Explain your view. What evidence or experience supports it?"></textarea>
+              <div class="composer-bottom">
+                <small><span id="charCount">0</span>/500 characters · Be respectful</small>
+                <button class="primary" id="postButton">Post argument</button>
+              </div>
+              <div class="notice" id="postNotice" role="status"></div>
+            </div>
+
+            <div class="comments" id="comments">
+              <div class="comment">
+                <div class="comment-head"><strong>CuriousPanda</strong><span class="muted">Side: Yes</span></div>
+                <p>Digital skills should be available to everyone, but students should be allowed to choose skills related to their field.</p>
+                <button class="reply-button">↳ Reply with respect</button>
+              </div>
+              <div class="comment">
+                <div class="comment-head"><strong>QuietComet</strong><span class="muted">Side: Not necessarily</span></div>
+                <p>I agree with access to digital training. I don't think every student needs the same skills or the same level of training.</p>
+                <button class="reply-button">↳ Reply with respect</button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <aside>
+          <section class="panel side-panel" id="how">
+            <h3>How Common Ground works</h3>
+            <div class="rule"><b>1</b><span><strong style="color:var(--text)">Choose a side.</strong><br>Explain what you believe and why.</span></div>
+            <div class="rule"><b>2</b><span><strong style="color:var(--text)">Listen and respond.</strong><br>Challenge ideas, not people.</span></div>
+            <div class="rule"><b>3</b><span><strong style="color:var(--text)">Build an agreement.</strong><br>Suggest wording both sides can accept.</span></div>
+            <div class="rule"><b>4</b><span><strong style="color:var(--text)">Recognize good faith.</strong><br>Earn respect for thoughtful discussion.</span></div>
+          </section>
+
+          <section class="panel side-panel" style="margin-top:16px">
+            <h3>Coming up next</h3>
+            <div class="topic-list">
+              <div class="topic-item"><strong>Should AI tools be allowed in every classroom?</strong><span>Technology · Tomorrow</span></div>
+              <div class="topic-item"><strong>Is saving money more important than enjoying life?</strong><span>Money · Upcoming</span></div>
+              <div class="topic-item"><strong>Should community service be part of graduation?</strong><span>Society · Upcoming</span></div>
+            </div>
+          </section>
+
+          <section class="panel side-panel" style="margin-top:16px">
+            <h3>Community promise</h3>
+            <p class="muted" style="font-size:13px;margin-bottom:0">No harassment. No personal attacks. No pressure to agree. A real agreement must represent both sides fairly.</p>
+          </section>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <span>© 2026 Common Ground · Prototype concept</span>
+      <span>Different opinions. Shared understanding.</span>
+    </div>
+  </footer>
+
+  <script>
+    // Prototype only: interactions are stored in this open page, not shared with other users.
+    let yesVotes = 74;
+    let noVotes = 54;
+    let progress = 62;
+    let guestName = "";
+    const $ = (id) => document.getElementById(id);
+
+    function showNotice(id, message) {
+      const node = $(id);
+      node.textContent = message;
+      node.classList.add("show");
+    }
+
+    $("guestButton").addEventListener("click", () => {
+      const entered = prompt("Choose an anonymous username (no real name needed):", guestName || "CuriousGuest");
+      if (entered === null) return;
+      const cleaned = entered.trim().replace(/\s+/g, "").slice(0, 20);
+      if (cleaned.length < 3) {
+        alert("Choose a username with at least 3 characters.");
+        return;
+      }
+      guestName = cleaned;
+      $("guestButton").textContent = "@" + guestName;
+      showNotice("postNotice", "You're browsing as @" + guestName + ". This is a demo, so your username is not saved to an account.");
+    });
+
+    document.querySelectorAll("[data-side]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!guestName) {
+          showNotice("postNotice", "Choose an anonymous username first using “Enter as guest”.");
+          return;
+        }
+        if (button.dataset.side === "yes") {
+          yesVotes++;
+          $("yesCount").textContent = yesVotes;
+        } else {
+          noVotes++;
+          $("noCount").textContent = noVotes;
+        }
+        $("heroParticipants").textContent = Number($("heroParticipants").textContent) + 1;
+        showNotice("postNotice", "Your side was recorded in this demo. Votes are not saved or shared.");
+      });
+    });
+
+    $("argument").addEventListener("input", () => {
+      $("charCount").textContent = $("argument").value.length;
+    });
+
+    $("postButton").addEventListener("click", () => {
+      if (!guestName) {
+        showNotice("postNotice", "Choose an anonymous username first using “Enter as guest”.");
+        return;
+      }
+      const message = $("argument").value.trim();
+      if (message.length < 8) {
+        showNotice("postNotice", "Write at least 8 characters so people can understand your point.");
+        return;
+      }
+      const card = document.createElement("div");
+      card.className = "comment";
+      const head = document.createElement("div");
+      head.className = "comment-head";
+      const author = document.createElement("strong");
+      author.textContent = guestName;
+      const side = document.createElement("span");
+      side.className = "muted";
+      side.textContent = "New argument";
+      const body = document.createElement("p");
+      body.textContent = message;
+      const reply = document.createElement("button");
+      reply.className = "reply-button";
+      reply.textContent = "↳ Reply with respect";
+      reply.addEventListener("click", () => {
+        $("argument").value = "@" + guestName + " ";
+        $("argument").focus();
+        $("charCount").textContent = $("argument").value.length;
+      });
+      head.append(author, side);
+      card.append(head, body, reply);
+      $("comments").prepend(card);
+      $("argument").value = "";
+      $("charCount").textContent = "0";
+      $("heroReplies").textContent = Number($("heroReplies").textContent) + 1;
+      showNotice("postNotice", "Argument added to this page. It will disappear when you reload because this is a prototype.");
+    });
+
+    $("agreeButton").addEventListener("click", () => {
+      if (progress < 100) progress = Math.min(100, progress + 5);
+      $("progressLabel").textContent = progress + "%";
+      $("progressBar").style.width = progress + "%";
+      document.querySelector(".progress").setAttribute("aria-valuenow", progress);
+      showNotice("agreementNotice", "Thanks for supporting the proposed agreement in this demo. Real agreement tracking will come with the database.");
+    });
+
+    $("reviseButton").addEventListener("click", () => {
+      const suggestion = prompt("Suggest a fairer version of the agreement:", $("agreementText").textContent);
+      if (suggestion === null || !suggestion.trim()) return;
+      $("agreementText").textContent = suggestion.trim().slice(0, 350);
+      showNotice("agreementNotice", "Your suggested wording is now shown in this demo. It has not been sent to other users.");
+    });
+
+    document.querySelectorAll(".reply-button").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!guestName) {
+          showNotice("postNotice", "Choose an anonymous username first, then write your reply in the argument box.");
+          return;
+        }
+        $("argument").value = "Replying to this point: ";
+        $("charCount").textContent = $("argument").value.length;
+        $("argument").focus();
+      });
+    });
+  </script>
+</body>
+</html>
